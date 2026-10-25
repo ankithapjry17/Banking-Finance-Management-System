@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SmartBank Database System</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f1f5f9;
+      color: #333;
+    }
+    header {
+      background: #0f172a;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    main {
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px;
+    }
+    section {
+      background: white;
+      margin-bottom: 30px;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      margin-top: 0;
+      color: #1e40af;
+    }
+    form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    label {
+      font-weight: bold;
+    }
+    input, select {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      width: 100%;
+    }
+    button {
+      grid-column: span 2;
+      background: #1e40af;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+    button:hover {
+      background: #2563eb;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🏦 SmartBank Database System</h1>
+  </header>
+  <main>
+
+    <!-- BANK -->
+    <section>
+      <h2>Bank Registration</h2>
+      <form id="bankForm">
+        <input type="text" id="bankId" placeholder="Bank ID (e.g., B001)" required />
+        <input type="text" id="bankName" placeholder="Bank Name" required />
+        <input type="text" id="bankLocation" placeholder="Location" required />
+        <button type="submit">Add Bank</button>
+      </form>
+         </section>
+
+    <!-- BRANCH -->
+    <section>
+      <h2>Branch Registration</h2>
+      <form id="branchForm">
+        <input type="text" id="branchId" placeholder="Branch ID (e.g., BR001)" required />
+        <input type="text" id="branchName" placeholder="Branch Name" required />
+        <input type="text" id="branchLocation" placeholder="Location" required />
+        <select id="branchBankId" required>
+          <option value="">-- Select Bank ID --</option>
+        </select>
+        <button type="submit">Add Branch</button>
+      </form>
+    </section>
+
+    <!-- CUSTOMER -->
+    <section>
+      <h2>Customer Registration</h2>
+      <form id="customerForm">
+        <input type="text" id="custId" placeholder="Customer ID (Auto)" readonly />
+        <input type="text" id="custName" placeholder="Name" required />
+        <input type="text" id="custAddr" placeholder="Address" required />
+        <input type="tel" id="custPhone" placeholder="Phone" required />
+        <input type="email" id="custEmail" placeholder="Email" required />
+        <input type="date" id="custDob" placeholder="DOB" required />
+        <button type="submit">Add Customer</button>
+      </form>
+    </section>
+
+    <!-- ACCOUNT -->
+    <section>
+      <h2>Account Opening</h2>
+      <form id="accountForm">
+        <input type="text" id="accId" placeholder="Account No (Auto)" readonly />
+        <select id="accCustId" required>
+          <option value="">-- Select Customer --</option>
+        </select>
+        <select id="accBranchId" required>
+          <option value="">-- Select Branch --</option>
+        </select>
+        <select id="accType" required>
+          <option value="Saving">Saving</option>
+          <option value="Current">Current</option>
+        </select>
+        <input type="number" id="accBalance" placeholder="Initial Balance" required />
+        <button type="submit">Create Account</button>
+      </form>
+    </section>
+
+    <!-- TRANSACTION -->
+    <section>
+      <h2>Account Transaction</h2>
+      <form id="txnForm">
+        <input type="text" id="txnId" placeholder="Transaction ID (Auto)" readonly />
+        <select id="txnAccId" required>
+          <option value="">-- Select Account --</option>
+        </select>
+        <select id="txnType" required>
+          <option value="Credit">Credit</option>
+          <option value="Debit">Debit</option>
+        </select>
+        <input type="number" id="txnAmt" placeholder="Amount" required />
+        <input type="date" id="txnDate" required />
+        <button type="submit">Submit Transaction</button>
+      </form>
+    </section>
+
+    <!-- LOAN -->
+    <section>
+      <h2>Loan Application</h2>
+      <form id="loanForm">
+        <input type="text" id="loanId" placeholder="Loan ID (Auto)" readonly />
+        <select id="loanCustId" required>
+          <option value="">-- Select Customer --</option>
+        </select>
+        <input type="number" id="loanAmt" placeholder="Loan Amount" required />
+        <input type="number" id="loanRate" placeholder="Interest Rate (%)" required />
+        <input type="number" id="loanTerm" placeholder="Term (Years)" required />
+        <button type="submit">Apply Loan</button>
+      </form>
+    </section>
+
+    <!-- EMI -->
+    <section>
+      <h2>EMI Payment</h2>
+      <form id="emiForm">
+        <input type="text" id="emiId" placeholder="EMI ID (Auto)" readonly />
+        <select id="emiLoanId" required>
+          <option value="">-- Select Loan --</option>
+        </select>
+        <input type="number" id="emiAmt" placeholder="EMI Amount" required />
+        <input type="date" id="emiDate" required />
+        <select id="emiStatus" required>
+          <option value="Paid">Paid</option>
+          <option value="Pending">Pending</option>
+        </select>
+        <button type="submit">Pay EMI</button>
+      </form>
+    </section>
+
+  </main>
+
+  <script>
+    // ID Counters
+    let custId = 1001, accId = 2001, txnId = 3001, loanId = 4001, emiId = 5001;
+
+    // Populate auto-IDs
+    document.getElementById("custId").value = "C" + custId++;
+    document.getElementById("accId").value = "A" + accId++;
+    document.getElementById("txnId").value = "T" + txnId++;
+    document.getElementById("loanId").value = "L" + loanId++;
+    document.getElementById("emiId").value = "E" + emiId++;
+
+    // Store dynamic dropdowns
+    let banks = [], branches = [], customers = [], accounts = [], loans = [];
+
+    // ✅ FIXED FUNCTION
+    function updateDropdown(id, data, displayField) {
+      const sel = document.getElementById(id);
+      sel.innerHTML = `<option value="">-- Select --</option>`;
+      data.forEach(item => {
+        sel.innerHTML += `<option value="${item.id}">${item.id} - ${item[displayField]}</option>`;
+      });
+    }
+
+    // BANK
+    document.getElementById("bankForm").onsubmit = e => {
+      e.preventDefault();
+      const id = document.getElementById("bankId").value;
+      const name = document.getElementById("bankName").value;
+      banks.push({ id, name });
+      updateDropdown("branchBankId", banks, "name");
+      alert("Bank Added!");
+    };
+
+    
+
+    // BRANCH
+    document.getElementById("branchForm").onsubmit = e => {
+      e.preventDefault();
+      const id = document.getElementById("branchId").value;
+      const name = document.getElementById("branchName").value;
+      const bankId = document.getElementById("branchBankId").value;
+      branches.push({ id, name, bankId });
+      updateDropdown("accBranchId", branches, "name");
+      alert("Branch Added!");
+    };
+
+    // CUSTOMER
+    document.getElementById("customerForm").onsubmit = e => {
+      e.preventDefault();
+      const id = document.getElementById("custId").value;
+      const name = document.getElementById("custName").value;
+      customers.push({ id, name });
+      updateDropdown("accCustId", customers, "name");
+      updateDropdown("loanCustId", customers, "name");
+      document.getElementById("custId").value = "C" + custId++;
+      alert("Customer Registered!");
+    };
+
+    // ACCOUNT
+    document.getElementById("accountForm").onsubmit = e => {
+      e.preventDefault();
+      const id = document.getElementById("accId").value;
+      const custId = document.getElementById("accCustId").value;
+      accounts.push({ id, custId });
+      updateDropdown("txnAccId", accounts, "id");
+      document.getElementById("accId").value = "A" + accId++;
+      alert("Account Created!");
+    };
+
+    // TRANSACTION
+    document.getElementById("txnForm").onsubmit = e => {
+      e.preventDefault();
+      document.getElementById("txnId").value = "T" + txnId++;
+      alert("Transaction Recorded!");
+    };
+
+    // LOAN
+    document.getElementById("loanForm").onsubmit = e => {
+      e.preventDefault();
+      const id = document.getElementById("loanId").value;
+      loans.push({ id });
+      updateDropdown("emiLoanId", loans, "id");
+      document.getElementById("loanId").value = "L" + loanId++;
+      alert("Loan Applied!");
+    };
+
+    // EMI
+    document.getElementById("emiForm").onsubmit = e => {
+      e.preventDefault();
+      document.getElementById("emiId").value = "E" + emiId++;
+      alert("EMI Recorded!");
+    };
+  </script>
+</body>
+</html>
